@@ -19,9 +19,14 @@
       <% end %>
     </tbody>
   </table>
+<% else %>
+  <div class="center jumbotron">
+    <div class="text-center">
+      <h1>Welcome to the tasklist</h1>
+    </div>
+  </div>
 <% end %>
 <div>
   <%= paginate @tasks %>
 </div>
-
 <%= link_to '新規タスクの作成', new_task_path, class: "btn btn-primary" %>
