@@ -1,20 +1,30 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
-  before_action :correct_user, only: [:destroy]
+  before_action :correct_user, only: [:show, :destroy]
   
   def index
-    @tasks = Task.all
+    if logged_in?
+      @task = current_user.tasks.build  # form_with 用
+      @tasks = current_user.tasks.order(id: :desc).page(params[:page])
+    end
   end
   
   def new
-    @task = Task.new
-  end
-  def edit
-     @task = Task.find(params[:id])
+    if logged_in?
+      @task = current_user.tasks.build
+    end
   end
   
+  def edit
+    if logged_in?
+     @task = Task.find(params[:id])
+    end
+  end 
+  
   def show
+    if logged_in?
     @task = Task.find(params[:id])
+    end
   end
   
   def update
@@ -50,7 +60,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:content)
+    params.require(:task).permit(:content, :status)
   end
   
   def correct_user
